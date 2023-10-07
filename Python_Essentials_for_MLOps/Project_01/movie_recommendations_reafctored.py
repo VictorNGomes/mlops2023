@@ -6,14 +6,21 @@ import logging
 import pandas as pd
 import re
 import numpy as np
-import ipywidgets as widgets
 from IPython.display import display
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 # Configuração do logging
 import logging
-logging.basicConfig(filename='recommendation.log', level=logging.INFO)
+log_formatter = logging.Formatter("%(asctime)s [%(levelname)s] - %(message)s")
+
+# Configuração do logging
+log_file = 'recommendation.log'
+log_handler = logging.FileHandler(log_file)
+log_handler.setFormatter(log_formatter)
+logger = logging.getLogger()
+logger.addHandler(log_handler)
+logger.setLevel(logging.INFO)
 
 
 # URL do arquivo ZIP
@@ -26,34 +33,71 @@ csv_files = ["movies.csv", "ratings.csv"]
 output_directory = "./movielens_data/"
 
 # Função para fazer o download e extrair os arquivos CSV
-def download_and_extract_data(zip_url, csv_files, output_directory):
+def create_output_directory(output_directory):
     try:
-        # Cria o diretório de saída se ele não existir
         if not os.path.exists(output_directory):
             os.makedirs(output_directory)
+            logging.info(f"Diretório '{output_directory}' criado com sucesso.")
+        else:
+            logging.info(f"Diretório '{output_directory}' já existe.")
 
-        # Faz o download do arquivo ZIP
+        return True
+
+    except Exception as e:
+        logging.error(f"Erro ao criar o diretório de saída: {str(e)}")
+        return False
+
+# Função para fazer o download do arquivo ZIP
+def download_zip(zip_url, output_directory):
+    try:
         response = requests.get(zip_url)
         with open(os.path.join(output_directory, "movielens_data.zip"), "wb") as zip_file:
             zip_file.write(response.content)
+        logging.info("Download do arquivo ZIP concluído com sucesso.")
+        return True
 
-        # Extrai os arquivos CSV do ZIP
+    except Exception as e:
+        logging.error(f"Erro ao fazer o download do arquivo ZIP: {str(e)}")
+        return False
+
+# Função para extrair arquivos CSV do ZIP
+def extract_csv_files(output_directory):
+    try:
         with zipfile.ZipFile(os.path.join(output_directory, "movielens_data.zip"), "r") as zip_ref:
             zip_ref.extractall(output_directory)
+        logging.info("Arquivos CSV extraídos com sucesso.")
+        return True
 
-        logging.info("Arquivos extraídos com sucesso.")
+    except Exception as e:
+        logging.error(f"Erro ao extrair arquivos CSV do ZIP: {str(e)}")
+        return False
 
-        # Carrega os arquivos CSV em DataFrames do pandas
+# Função para carregar os arquivos CSV em DataFrames
+def load_data(csv_files, output_directory):
+    try:
         data = {}
         for file_name in csv_files:
-            file_path = os.path.join(output_directory, file_name)
+            file_path = os.path.join(output_directory+"/ml-25m", file_name)
             data[file_name.split(".")[0]] = pd.read_csv(file_path)
-
+        logging.info("Dados carregados com sucesso.")
         return data
 
     except Exception as e:
-        logging.error(f"Erro ao fazer o download e extrair os dados: {str(e)}")
+        logging.error(f"Erro ao carregar os dados CSV: {str(e)}")
         return None
+
+# Função principal que chama as etapas
+def download_and_extract_data(zip_url, csv_files, output_directory):
+    if create_output_directory(output_directory):
+        if download_zip(zip_url, output_directory):
+            if extract_csv_files(output_directory):
+                return load_data(csv_files, output_directory)
+    
+    return None
+
+def clean_title(title):
+    title = re.sub("[^a-zA-Z0-9 ]", "", title)
+    return title
 
 # Chama a função para baixar e extrair os dados
 data = download_and_extract_data(zip_url, csv_files, output_directory)
@@ -62,24 +106,24 @@ try:
     if data:
         movies = data["movies"]
         ratings = data["ratings"]
+        movies["clean_title"] = movies["title"].apply(clean_title) 
+        vectorizer = TfidfVectorizer(ngram_range=(1,2))
+        tfidf = vectorizer.fit_transform(movies["clean_title"])
 
         # Agora você pode usar os DataFrames movies_df e ratings_df para trabalhar com os dados.
         # Por exemplo, você pode imprimir as primeiras linhas de cada DataFrame:
 
         print("Primeiras linhas do DataFrame 'movies':")
-        print(movies_df.head())
+        print(movies.head())
 
         print("\nPrimeiras linhas do DataFrame 'ratings':")
-        print(ratings_df.head())
-        vectorizer = TfidfVectorizer(ngram_range=(1, 2))
-        tfidf = vectorizer.fit_transform(movies["clean_title"])
+        print(ratings.head())
+        
 except Exception as e:
     logging.error(f"Erro ao carregar os dados: {str(e)}")
 
 # Função para limpar o título
-def clean_title(title):
-    title = re.sub("[^a-zA-Z0-9 ]", "", title)
-    return title
+
 
 # Função para realizar a pesquisa com base no título
 def search(title):
@@ -113,9 +157,11 @@ def find_similar_movies(movie_id):
     except Exception as e:
         logging.error(f"Erro ao encontrar filmes similares: {str(e)}")
         return pd.DataFrame()
-    
 
-movie_input = widgets.Text(
+
+
+
+"""movie_input = widgets.Text(
     value='Toy Story',
     description='Movie Title:',
     disabled=False
@@ -156,4 +202,14 @@ def on_type_recommendation(data):
 
 movie_name_input.observe(on_type_recommendation, names='value')
 
-display(movie_name_input, recommendation_list)
+display(movie_name_input, recommendation_list)"""
+
+def on_type():
+    
+    title = "Toy Story "
+    if len(title) > 5:
+        results = search(title)
+        if not results.empty:
+            print(results)
+
+on_type()
