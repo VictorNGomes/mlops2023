@@ -1,3 +1,7 @@
+"""
+O módulo 'zipfile' permite trabalhar com arquivos compactados no formato ZIP.
+Ele fornece classes e métodos para criar, ler, escrever e extrair arquivos ZIP.
+"""
 import zipfile
 import os
 import logging
@@ -51,7 +55,7 @@ def create_output_directory(output_directory):
 
         return True
 
-    except Exception as err:
+    except OSError as err:
         logging.error("Erro ao criar o diretório de saída: %s",err)
         return False
 
@@ -81,7 +85,7 @@ def download_zip(zip_url, output_directory):
         logging.info("Download do arquivo ZIP concluído com sucesso.")
         return True
 
-    except Exception as err:
+    except FileNotFoundError as err:
         logging.error("Erro ao fazer o download do arquivo ZIP: %s",err)
         return False
 
@@ -102,12 +106,12 @@ def extract_csv_files(output_directory):
         logging.info("Arquivos CSV extraídos com sucesso.")
         return True
 
-    except Exception as err:
+    except FileExistsError as err:
         logging.error("Erro ao extrair arquivos CSV do ZIP: %s",err)
         return False
 
 # Função para carregar os arquivos CSV em DataFrames
-def load_data(csv_files, output_directory):
+def load_data(csv_path, output_directory):
     """
     Carrega os arquivos CSV em DataFrames do pandas.
 
@@ -120,13 +124,13 @@ def load_data(csv_files, output_directory):
     """
     try:
         data = {}
-        for file_name in csv_files:
+        for file_name in csv_path:
             file_path = os.path.join(output_directory+"/ml-25m", file_name)
-            data[file_name.split(".")[0]] = pd.read_csv(file_path)
+            data[file_name.split(".", maxsplit=1)[0]] = pd.read_csv(file_path)
         logging.info("Dados carregados com sucesso.")
         return data
 
-    except Exception as err:
+    except FileExistsError as err:
         logging.error("Erro ao carregar os dados CSV: %s",err)
         return None
 
@@ -146,7 +150,7 @@ def download_and_extract_data(zip_url, csv_files, output_directory):
     if create_output_directory(output_directory):
         if download_zip(zip_url, output_directory):
             if extract_csv_files(output_directory):
-                return load_data(csv_files, output_directory)
+                return load_data(csv_path=csv_files, output_directory=output_directory)
 
     return None
 
@@ -217,7 +221,7 @@ def search(title):
         indices = np.argpartition(similarity, -5)[-5:]
         results = movies.iloc[indices].iloc[::-1]
         return results
-    except Exception as err:
+    except AssertionError as err:
         logging.error("Erro na pesquisa: %s",err)
         return pd.DataFrame()
 
