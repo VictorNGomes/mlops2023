@@ -3,10 +3,8 @@ import zipfile
 import pandas as pd
 import os
 import logging
-import pandas as pd
 import re
 import numpy as np
-from IPython.display import display
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -49,9 +47,16 @@ def create_output_directory(output_directory):
 
 # Função para fazer o download do arquivo ZIP
 def download_zip(zip_url, output_directory):
+    zip_file_path = os.path.join(output_directory, "movielens_data.zip")
+    
+    # Verifica se o arquivo ZIP já existe no diretório de saída
+    if os.path.exists(zip_file_path):
+        logging.info("O arquivo ZIP já existe. Não é necessário fazer o download novamente.")
+        return True
+    
     try:
         response = requests.get(zip_url)
-        with open(os.path.join(output_directory, "movielens_data.zip"), "wb") as zip_file:
+        with open(zip_file_path, "wb") as zip_file:
             zip_file.write(response.content)
         logging.info("Download do arquivo ZIP concluído com sucesso.")
         return True
@@ -109,15 +114,6 @@ try:
         movies["clean_title"] = movies["title"].apply(clean_title) 
         vectorizer = TfidfVectorizer(ngram_range=(1,2))
         tfidf = vectorizer.fit_transform(movies["clean_title"])
-
-        # Agora você pode usar os DataFrames movies_df e ratings_df para trabalhar com os dados.
-        # Por exemplo, você pode imprimir as primeiras linhas de cada DataFrame:
-
-        print("Primeiras linhas do DataFrame 'movies':")
-        print(movies.head())
-
-        print("\nPrimeiras linhas do DataFrame 'ratings':")
-        print(ratings.head())
         
 except Exception as e:
     logging.error(f"Erro ao carregar os dados: {str(e)}")
@@ -159,57 +155,14 @@ def find_similar_movies(movie_id):
         return pd.DataFrame()
 
 
-
-
-"""movie_input = widgets.Text(
-    value='Toy Story',
-    description='Movie Title:',
-    disabled=False
-)
-movie_list = widgets.Output()
-
-def on_type(data):
-    with movie_list:
-        movie_list.clear_output()
-        title = data["new"]
-        if len(title) > 5:
-            results = search(title)
-            if not results.empty:
-                display(results)
-
-movie_input.observe(on_type, names='value')
-
-display(movie_input, movie_list)
-
-movie_name_input = widgets.Text(
-    value='Toy Story',
-    description='Movie Title:',
-    disabled=False
-)
-recommendation_list = widgets.Output()
-
-def on_type_recommendation(data):
-    with recommendation_list:
-        recommendation_list.clear_output()
-        title = data["new"]
-        if len(title) > 5:
-            results = search(title)
-            if not results.empty:
-                movie_id = results.iloc[0]["movieId"]
-                recommendations = find_similar_movies(movie_id)
-                if not recommendations.empty:
-                    display(recommendations)
-
-movie_name_input.observe(on_type_recommendation, names='value')
-
-display(movie_name_input, recommendation_list)"""
-
-def on_type():
-    
-    title = "Toy Story "
+def on_type_recommendation():
+    title = "Toy Story"
     if len(title) > 5:
         results = search(title)
         if not results.empty:
-            print(results)
+            movie_id = results.iloc[0]["movieId"]
+            recommendations = find_similar_movies(movie_id)
+            if not recommendations.empty:
+                print(recommendations)
 
-on_type()
+on_type_recommendation()
