@@ -30,6 +30,8 @@ csv_files = ["movies.csv", "ratings.csv"]
 # Diretório onde você deseja salvar os arquivos CSV extraídos
 output_directory = "./movielens_data/"
 
+vectorizer = TfidfVectorizer(ngram_range=(1,2))
+
 # Função para fazer o download e extrair os arquivos CSV
 def create_output_directory(output_directory):
     try:
@@ -107,24 +109,37 @@ def clean_title(title):
 # Chama a função para baixar e extrair os dados
 data = download_and_extract_data(zip_url, csv_files, output_directory)
 
+
 try:
     if data:
         movies = data["movies"]
         ratings = data["ratings"]
         movies["clean_title"] = movies["title"].apply(clean_title) 
-        vectorizer = TfidfVectorizer(ngram_range=(1,2))
-        tfidf = vectorizer.fit_transform(movies["clean_title"])
+        
+        
         
 except Exception as e:
     logging.error(f"Erro ao carregar os dados: {str(e)}")
 
-# Função para limpar o título
+def vectorized_data():
+    try:    
+        movies["clean_title"] = movies["title"].apply(clean_title)
+        logging.info(f"Título limpo")
+        tfidf = vectorizer.fit_transform(movies["clean_title"])
+        logging.info(f"Títulos vetorizados")
+
+        return tfidf
+    except Exception as e:
+        logging.error(f"Erro na limpeza do título e vetorização dos dados: {str(e)}")
+
+
 
 
 # Função para realizar a pesquisa com base no título
 def search(title):
     try:
         title = clean_title(title)
+        tfidf = vectorized_data()
         query_vec = vectorizer.transform([title])
         similarity = cosine_similarity(query_vec, tfidf).flatten()
         indices = np.argpartition(similarity, -5)[-5:]
