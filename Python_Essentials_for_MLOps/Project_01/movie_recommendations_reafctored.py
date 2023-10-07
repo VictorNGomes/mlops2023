@@ -1,20 +1,19 @@
-import requests
 import zipfile
-import pandas as pd
 import os
 import logging
 import re
+import requests
+import pandas as pd
+
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-# Configuração do logging
-import logging
 log_formatter = logging.Formatter("%(asctime)s [%(levelname)s] - %(message)s")
 
 # Configuração do logging
-log_file = 'recommendation.log'
-log_handler = logging.FileHandler(log_file)
+LOG_FILE = 'recommendation.log'
+log_handler = logging.FileHandler(LOG_FILE)
 log_handler.setFormatter(log_formatter)
 logger = logging.getLogger()
 logger.addHandler(log_handler)
@@ -22,13 +21,13 @@ logger.setLevel(logging.INFO)
 
 
 # URL do arquivo ZIP
-zip_url = "https://files.grouplens.org/datasets/movielens/ml-25m.zip"
+ZIP_URL = "https://files.grouplens.org/datasets/movielens/ml-25m.zip"
 
 # Nome dos arquivos CSV que você deseja extrair
 csv_files = ["movies.csv", "ratings.csv"]
 
 # Diretório onde você deseja salvar os arquivos CSV extraídos
-output_directory = "./movielens_data/"
+OUTPUT_DIRECTORY = "./movielens_data/"
 
 vectorizer = TfidfVectorizer(ngram_range=(1,2))
 
@@ -37,34 +36,34 @@ def create_output_directory(output_directory):
     try:
         if not os.path.exists(output_directory):
             os.makedirs(output_directory)
-            logging.info(f"Diretório '{output_directory}' criado com sucesso.")
+            logging.info("Diretório '%s' criado com sucesso.",output_directory)
         else:
-            logging.info(f"Diretório '{output_directory}' já existe.")
+            logging.info("Diretório '%s' já existe.",output_directory)
 
         return True
 
-    except Exception as e:
-        logging.error(f"Erro ao criar o diretório de saída: {str(e)}")
+    except Exception as err:
+        logging.error("Erro ao criar o diretório de saída: %s",err)
         return False
 
 # Função para fazer o download do arquivo ZIP
 def download_zip(zip_url, output_directory):
     zip_file_path = os.path.join(output_directory, "movielens_data.zip")
-    
+
     # Verifica se o arquivo ZIP já existe no diretório de saída
     if os.path.exists(zip_file_path):
         logging.info("O arquivo ZIP já existe. Não é necessário fazer o download novamente.")
         return True
-    
+
     try:
-        response = requests.get(zip_url)
+        response = requests.get(zip_url,timeout=10)
         with open(zip_file_path, "wb") as zip_file:
             zip_file.write(response.content)
         logging.info("Download do arquivo ZIP concluído com sucesso.")
         return True
 
-    except Exception as e:
-        logging.error(f"Erro ao fazer o download do arquivo ZIP: {str(e)}")
+    except Exception as err:
+        logging.error("Erro ao fazer o download do arquivo ZIP: %s",err)
         return False
 
 # Função para extrair arquivos CSV do ZIP
@@ -75,8 +74,8 @@ def extract_csv_files(output_directory):
         logging.info("Arquivos CSV extraídos com sucesso.")
         return True
 
-    except Exception as e:
-        logging.error(f"Erro ao extrair arquivos CSV do ZIP: {str(e)}")
+    except Exception as err:
+        logging.error("Erro ao extrair arquivos CSV do ZIP: %s",err)
         return False
 
 # Função para carregar os arquivos CSV em DataFrames
@@ -89,8 +88,8 @@ def load_data(csv_files, output_directory):
         logging.info("Dados carregados com sucesso.")
         return data
 
-    except Exception as e:
-        logging.error(f"Erro ao carregar os dados CSV: {str(e)}")
+    except Exception as err:
+        logging.error("Erro ao carregar os dados CSV: %s",err)
         return None
 
 # Função principal que chama as etapas
@@ -99,7 +98,7 @@ def download_and_extract_data(zip_url, csv_files, output_directory):
         if download_zip(zip_url, output_directory):
             if extract_csv_files(output_directory):
                 return load_data(csv_files, output_directory)
-    
+
     return None
 
 def clean_title(title):
@@ -107,30 +106,30 @@ def clean_title(title):
     return title
 
 # Chama a função para baixar e extrair os dados
-data = download_and_extract_data(zip_url, csv_files, output_directory)
+data = download_and_extract_data(ZIP_URL, csv_files, OUTPUT_DIRECTORY)
 
 
 try:
     if data:
         movies = data["movies"]
         ratings = data["ratings"]
-        movies["clean_title"] = movies["title"].apply(clean_title) 
-        
-        
-        
-except Exception as e:
-    logging.error(f"Erro ao carregar os dados: {str(e)}")
+        movies["clean_title"] = movies["title"].apply(clean_title)
+
+
+except Exception as err:
+    logging.error("Erro ao carregar os dados: %s",err)
 
 def vectorized_data():
-    try:    
+    try:
         movies["clean_title"] = movies["title"].apply(clean_title)
-        logging.info(f"Título limpo")
+        logging.info("Título limpo")
         tfidf = vectorizer.fit_transform(movies["clean_title"])
-        logging.info(f"Títulos vetorizados")
+        logging.info("Títulos vetorizados")
 
         return tfidf
-    except Exception as e:
-        logging.error(f"Erro na limpeza do título e vetorização dos dados: {str(e)}")
+    except Exception as err:
+        logging.error("Erro na limpeza do título e vetorização dos dados: %s",err)
+        return None
 
 
 
@@ -145,28 +144,34 @@ def search(title):
         indices = np.argpartition(similarity, -5)[-5:]
         results = movies.iloc[indices].iloc[::-1]
         return results
-    except Exception as e:
-        logging.error(f"Erro na pesquisa: {str(e)}")
+    except Exception as err:
+        logging.error("Erro na pesquisa: %s",err)
         return pd.DataFrame()
 
 # Função para encontrar filmes similares
 def find_similar_movies(movie_id):
     try:
-        similar_users = ratings[(ratings["movieId"] == movie_id) & (ratings["rating"] > 4)]["userId"].unique()
-        similar_user_recs = ratings[(ratings["userId"].isin(similar_users)) & (ratings["rating"] > 4)]["movieId"]
+        similar_users = ratings[(ratings["movieId"] == movie_id) & (ratings["rating"] > 4)]\
+        ["userId"].unique()
+        similar_user_recs = ratings[(ratings["userId"].isin(similar_users)) & \
+                                    (ratings["rating"] > 4)]["movieId"]
         similar_user_recs = similar_user_recs.value_counts() / len(similar_users)
 
         similar_user_recs = similar_user_recs[similar_user_recs > 0.10]
-        all_users = ratings[(ratings["movieId"].isin(similar_user_recs.index)) & (ratings["rating"] > 4)]
-        all_user_recs = all_users["movieId"].value_counts() / len(all_users["userId"].unique())
+        all_users = ratings[(ratings["movieId"].\
+                             isin(similar_user_recs.index)) & (ratings["rating"] > 4)]
+        all_user_recs = all_users["movieId"].value_counts() / \
+            len(all_users["userId"].unique())
         rec_percentages = pd.concat([similar_user_recs, all_user_recs], axis=1)
         rec_percentages.columns = ["similar", "all"]
 
-        rec_percentages["score"] = rec_percentages["similar"] / rec_percentages["all"]
+        rec_percentages["score"] = \
+            rec_percentages["similar"] / rec_percentages["all"]
         rec_percentages = rec_percentages.sort_values("score", ascending=False)
-        return rec_percentages.head(10).merge(movies, left_index=True, right_on="movieId")[["score", "title", "genres"]]
-    except Exception as e:
-        logging.error(f"Erro ao encontrar filmes similares: {str(e)}")
+        return rec_percentages.head(10)\
+            .merge(movies, left_index=True, right_on="movieId")[["score", "title", "genres"]]
+    except Exception as err:
+        logging.error("Erro ao encontrar filmes similares: %s",err)
         return pd.DataFrame()
 
 
