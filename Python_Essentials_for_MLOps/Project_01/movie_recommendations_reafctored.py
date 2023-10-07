@@ -33,6 +33,15 @@ vectorizer = TfidfVectorizer(ngram_range=(1,2))
 
 # Função para fazer o download e extrair os arquivos CSV
 def create_output_directory(output_directory):
+    """
+    Cria o diretório de saída se ele não existir.
+
+    Args:
+        output_directory (str): O caminho para o diretório de saída.
+
+    Returns:
+        bool: True se o diretório foi criado com sucesso ou já existia, False em caso de erro.
+    """
     try:
         if not os.path.exists(output_directory):
             os.makedirs(output_directory)
@@ -48,6 +57,16 @@ def create_output_directory(output_directory):
 
 # Função para fazer o download do arquivo ZIP
 def download_zip(zip_url, output_directory):
+    """
+    Faz o download do arquivo ZIP se ele não existir no diretório de saída.
+
+    Args:
+        zip_url (str): A URL do arquivo ZIP a ser baixado.
+        output_directory (str): O caminho para o diretório de saída.
+
+    Returns:
+        bool: True se o download foi bem-sucedido ou o arquivo já existe, False em caso de erro.
+    """
     zip_file_path = os.path.join(output_directory, "movielens_data.zip")
 
     # Verifica se o arquivo ZIP já existe no diretório de saída
@@ -68,6 +87,15 @@ def download_zip(zip_url, output_directory):
 
 # Função para extrair arquivos CSV do ZIP
 def extract_csv_files(output_directory):
+    """
+    Extrai arquivos CSV do arquivo ZIP.
+
+    Args:
+        output_directory (str): O caminho para o diretório de saída.
+
+    Returns:
+        bool: True se a extração foi bem-sucedida, False em caso de erro.
+    """
     try:
         with zipfile.ZipFile(os.path.join(output_directory, "movielens_data.zip"), "r") as zip_ref:
             zip_ref.extractall(output_directory)
@@ -80,6 +108,16 @@ def extract_csv_files(output_directory):
 
 # Função para carregar os arquivos CSV em DataFrames
 def load_data(csv_files, output_directory):
+    """
+    Carrega os arquivos CSV em DataFrames do pandas.
+
+    Args:
+        csv_files (list): Lista de nomes de arquivos CSV.
+        output_directory (str): O caminho para o diretório de saída.
+
+    Returns:
+        dict: Um dicionário contendo DataFrames com os dados carregados.
+    """
     try:
         data = {}
         for file_name in csv_files:
@@ -94,6 +132,17 @@ def load_data(csv_files, output_directory):
 
 # Função principal que chama as etapas
 def download_and_extract_data(zip_url, csv_files, output_directory):
+    """
+    Função principal que baixa, extrai e carrega os dados.
+
+    Args:
+        zip_url (str): A URL do arquivo ZIP a ser baixado.
+        csv_files (list): Lista de nomes de arquivos CSV.
+        output_directory (str): O caminho para o diretório de saída.
+
+    Returns:
+        dict: Um dicionário contendo DataFrames com os dados carregados.
+    """
     if create_output_directory(output_directory):
         if download_zip(zip_url, output_directory):
             if extract_csv_files(output_directory):
@@ -102,6 +151,15 @@ def download_and_extract_data(zip_url, csv_files, output_directory):
     return None
 
 def clean_title(title):
+    """
+    Limpa o título do filme removendo caracteres especiais.
+
+    Args:
+        title (str): O título do filme.
+
+    Returns:
+        str: O título limpo.
+    """
     title = re.sub("[^a-zA-Z0-9 ]", "", title)
     return title
 
@@ -120,6 +178,12 @@ except Exception as err:
     logging.error("Erro ao carregar os dados: %s",err)
 
 def vectorized_data():
+    """
+    Realiza a vetorização dos títulos de filmes.
+
+    Returns:
+        scipy.sparse.csr_matrix: A matriz de recursos TF-IDF dos títulos de filmes.
+    """
     try:
         movies["clean_title"] = movies["title"].apply(clean_title)
         logging.info("Título limpo")
@@ -136,6 +200,15 @@ def vectorized_data():
 
 # Função para realizar a pesquisa com base no título
 def search(title):
+    """
+    Realiza a pesquisa de filmes com base no título.
+
+    Args:
+        title (str): O título do filme a ser pesquisado.
+
+    Returns:
+        pd.DataFrame: Um DataFrame contendo os resultados da pesquisa.
+    """
     try:
         title = clean_title(title)
         tfidf = vectorized_data()
@@ -150,6 +223,15 @@ def search(title):
 
 # Função para encontrar filmes similares
 def find_similar_movies(movie_id):
+    """
+    Encontra filmes similares com base no ID do filme.
+
+    Args:
+        movie_id (int): O ID do filme.
+
+    Returns:
+        pd.DataFrame: Um DataFrame contendo os filmes similares encontrados.
+    """
     try:
         similar_users = ratings[(ratings["movieId"] == movie_id) & (ratings["rating"] > 4)]\
         ["userId"].unique()
@@ -176,6 +258,9 @@ def find_similar_movies(movie_id):
 
 
 def on_type_recommendation():
+    """
+    Função para realizar uma pesquisa e recomendar filmes com base no título "Toy Story".
+    """
     title = "Toy Story"
     if len(title) > 5:
         results = search(title)
