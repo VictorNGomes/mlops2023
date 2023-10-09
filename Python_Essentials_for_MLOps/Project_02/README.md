@@ -14,15 +14,25 @@ Foi relaizado o tratamento de exceções, registro de atividades (logging) e pr�
 
 **Configuração e Instalação:**
 
+**Configuração e Instalação:**
+
 Para configurar o ambiente de desenvolvimento e executar este projeto localmente, siga estas etapas:
 
-1. Instale o Apache Airflow 2.3+ e Python 3.8+ no seu sistema.
+1. Instale o Apache Airflow 2.3+ e Python 3.8+ no seu sistema. Para instruções detalhadas sobre a instalação do Apache Airflow, consulte [este guia](https://github.com/dataquestio/project-walkthroughs/blob/master/podcast_summary/steps.md#instala%C3%A7%C3%A3o-do-apache-airflow).
+
 2. Instale as bibliotecas Python necessárias, como `pandas`, `sqlite3`, `xmltodict`, `requests`, `vosk`, e `pydub`.
+
 3. Configure as credenciais necessárias, como a URL do podcast e informações de autenticação, conforme aplicável.
+
 4. Clone este repositório para o seu ambiente local.
+
 5. Execute o arquivo `podcast_summary.py` para iniciar o pipeline de dados.
 
 Para obter mais detalhes e instruções específicas sobre a configuração local, consulte a seção "Configuração Local" abaixo.
+
+Este projeto oferece uma oportunidade prática de trabalhar com o Apache Airflow, processamento de áudio e integração de várias bibliotecas Python. Explore o código e utilize as instruções fornecidas para executar e personalizar o pipeline de acordo com as suas necessidades.
+
+
 
 Este projeto oferece uma oportunidade prática de trabalhar com o Apache Airflow, processamento de áudio e integração de várias bibliotecas Python. Explore o código e utilize as instruções fornecidas para executar e personalizar o pipeline de acordo com as suas necessidades.
 
