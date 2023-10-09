@@ -1,6 +1,6 @@
 # Sistema de Recomendação de Filmes
 
- Este projeto tem como objetivo a refatoração, aplicação de princípios de código limpo, linting, exception handling, logging e unit testing.Este é um projeto de sistema de recomendação de filmes baseado em conteúdo e filtragem colaborativa. O projeto faz parte do portfólio de projetos da Dataquest.io. 
+Este projeto tem como objetivo a refatoração, a aplicação dos princípios de código limpo, linting, tratamento de exceções, logging e testes unitários. Trata-se de um sistema de recomendação de filmes baseado em conteúdo e filtragem colaborativa. Este projeto faz parte do portfólio de projetos da Dataquest.io. 
 
 O projeto utiliza o conjunto de dados [MovieLens 25M](https://grouplens.org/datasets/movielens/25m/) para recomendar filmes com base em títulos, gêneros e avaliações dos usuários.
 
