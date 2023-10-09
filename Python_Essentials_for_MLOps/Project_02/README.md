@@ -1,3 +1,33 @@
+# Podcast Summary - Dataquest.io Portfolio Project
+
+Este projeto faz parte do portfólio de projetos do Dataquest.io e tem como objetivo criar um pipeline de dados usando o Apache Airflow. O pipeline baixa episódios de podcast automaticamente e os transcreve usando reconhecimento de fala, armazenando os resultados em um banco de dados SQLite para fácil consulta.
+
+**Objetivos do Projeto:**
+
+- Automatizar o processo de download de episódios de podcast.
+- Transcrever automaticamente o conteúdo de áudio dos episódios.
+- Armazenar os dados transcritos em um banco de dados para posterior análise.
+
+**Modificações Realizadas:**
+
+Foi relaizado o tratamento de exceções, registro de atividades (logging) e práticas de linting. Também incluímos uma seção sobre linting com o Pylint para garantir a qualidade e a consistência do código-fonte.
+
+**Configuração e Instalação:**
+
+Para configurar o ambiente de desenvolvimento e executar este projeto localmente, siga estas etapas:
+
+1. Instale o Apache Airflow 2.3+ e Python 3.8+ no seu sistema.
+2. Instale as bibliotecas Python necessárias, como `pandas`, `sqlite3`, `xmltodict`, `requests`, `vosk`, e `pydub`.
+3. Configure as credenciais necessárias, como a URL do podcast e informações de autenticação, conforme aplicável.
+4. Clone este repositório para o seu ambiente local.
+5. Execute o arquivo `podcast_summary.py` para iniciar o pipeline de dados.
+
+Para obter mais detalhes e instruções específicas sobre a configuração local, consulte a seção "Configuração Local" abaixo.
+
+Este projeto oferece uma oportunidade prática de trabalhar com o Apache Airflow, processamento de áudio e integração de várias bibliotecas Python. Explore o código e utilize as instruções fornecidas para executar e personalizar o pipeline de acordo com as suas necessidades.
+
+
+
 ## Registo e Tratamento de Erros
 
 Neste projeto, implementamos o tratamento de erros e o registo para garantir a confiabilidade e a rastreabilidade do nosso pipeline de dados. Abaixo, descrevemos como lidamos com exceções e geramos registos:
@@ -52,6 +82,15 @@ O linting com o Pylint oferece diversos benefícios, incluindo:
 * Facilitação da colaboração entre membros da equipe.
 
 No geral, o linting com o Pylint faz parte da nossa abordagem para manter um código limpo, confiável e de alta qualidade. Se você estiver contribuindo para este projeto, recomendamos seguir as diretrizes de linting com o Pylint para garantir que o seu código esteja alinhado com os padrões estabelecidos.
+
+## Contribuição
+
+Contribuições são bem-vindas! Sinta-se à vontade para abrir problemas (issues) e enviar solicitações de pull (pull requests) para melhorar o projeto.
+
+## Licença
+
+Este projeto é licenciado sob a Licença MIT - consulte o arquivo [LICENSE](LICENSE) para obter detalhes.
+
 
 
 
