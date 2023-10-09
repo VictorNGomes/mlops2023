@@ -7,18 +7,20 @@ obter informações sobre o ambiente de execução e muito mais.
 """
 import os
 import json
+import logging
 import requests
 import xmltodict
 import pendulum
 
 from airflow.decorators import dag, task
-
 from airflow.providers.sqlite.operators.sqlite import SqliteOperator
 from airflow.providers.sqlite.hooks.sqlite import SqliteHook
-
 from vosk import Model, KaldiRecognizer
 from pydub import AudioSegment
 
+# Configuração do registro (logging)
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+logger = logging.getLogger(__name__)
 
 PODCAST_URL = "https://www.marketplace.org/feed/podcast/marketplace/"
 EPISODE_FOLDER = "episodes"
@@ -48,7 +50,6 @@ def podcast_summary():
     Returns:
         None
     """
-
     create_database = SqliteOperator(
         task_id='create_table_sqlite',
         sql=r"""
@@ -75,11 +76,16 @@ def podcast_summary():
         Returns:
             episodes: List of podcast episode data.
         """
-        data = requests.get(PODCAST_URL,timeout=10)
-        feed = xmltodict.parse(data.text)
-        episodes = feed["rss"]["channel"]["item"]
-        print(f"Found {len(episodes)} episodes.")
-        return episodes
+        try:
+            data = requests.get(PODCAST_URL, timeout=10)
+            data.raise_for_status()  # Verifica se houve erro na requisição HTTP
+            feed = xmltodict.parse(data.text)
+            episodes = feed["rss"]["channel"]["item"]
+            logger.info("Found %s episodes.",len(episodes))
+            return episodes
+        except requests.exceptions.RequestException as err:
+            logger.error("Error fetching podcast data: %s",err)
+            raise
 
     podcast_episodes = get_episodes()
     create_database.set_downstream(podcast_episodes)
@@ -98,24 +104,29 @@ def podcast_summary():
         hook = SqliteHook(sqlite_conn_id="podcasts")
         stored_episodes = hook.get_pandas_df("SELECT * from episodes;")
         new_episodes = []
-        for episode in episodes:
-            if episode["link"] not in stored_episodes["link"].values:
-                filename = f"{episode['link'].split('/')[-1]}.mp3"
-                new_episodes.append([episode["link"],
-                                      episode["title"],
-                                      episode["pubDate"],
-                                      episode["description"],
-                                      filename]
-                                    )
+        try:
+            for episode in episodes:
+                if episode["link"] not in stored_episodes["link"].values:
+                    filename = f"{episode['link'].split('/')[-1]}.mp3"
+                    new_episodes.append([episode["link"],
+                                          episode["title"],
+                                          episode["pubDate"],
+                                          episode["description"],
+                                          filename]
+                                        )
 
-        hook.insert_rows(table='episodes',
-                        rows=new_episodes,
-                        target_fields=["link",
-                                        "title",
-                                        "published",
-                                        "description",
-                                        "filename"])
-        return new_episodes
+            hook.insert_rows(table='episodes',
+                            rows=new_episodes,
+                            target_fields=["link",
+                                            "title",
+                                            "published",
+                                            "description",
+                                            "filename"])
+            logger.info("Loaded %s new episodes.",len(new_episodes))
+            return new_episodes
+        except Exception as err:
+            logger.error("Error loading episodes into the database: %s",err)
+            raise
 
     new_episodes = load_episodes(podcast_episodes)
 
@@ -131,20 +142,26 @@ def podcast_summary():
             audio_files: List of downloaded audio file data.
         """
         audio_files = []
-        for episode in episodes:
-            name_end = episode["link"].split('/')[-1]
-            filename = f"{name_end}.mp3"
-            audio_path = os.path.join(EPISODE_FOLDER, filename)
-            if not os.path.exists(audio_path):
-                print(f"Downloading {filename}")
-                audio = requests.get(episode["enclosure"]["@url"],timeout=10)
-                with open(audio_path, "wb+") as file:
-                    file.write(audio.content)
-            audio_files.append({
-                "link": episode["link"],
-                "filename": filename
-            })
-        return audio_files
+        try:
+            for episode in episodes:
+                name_end = episode["link"].split('/')[-1]
+                filename = f"{name_end}.mp3"
+                audio_path = os.path.join(EPISODE_FOLDER, filename)
+                if not os.path.exists(audio_path):
+                    logger.info("Downloading %s",filename)
+                    audio = requests.get(episode["enclosure"]["@url"], timeout=10)
+                    audio.raise_for_status()  # Verifica se houve erro no download
+                    with open(audio_path, "wb+") as file:
+                        file.write(audio.content)
+                audio_files.append({
+                    "link": episode["link"],
+                    "filename": filename
+                })
+            logger.info("Downloaded %s audio files.",len(audio_files))
+            return audio_files
+        except (requests.exceptions.RequestException, IOError) as err:
+            logger.error("Error downloading audio files: %s}",err)
+            raise
 
     audio_files = download_episodes(podcast_episodes)
 
@@ -168,28 +185,33 @@ def podcast_summary():
         rec = KaldiRecognizer(model, FRAME_RATE)
         rec.SetWords(True)
 
-        for _ , row in untranscribed_episodes.iterrows():
-            print(f"Transcribing {row['filename']}")
-            filepath = os.path.join(EPISODE_FOLDER, row["filename"])
-            mp3 = AudioSegment.from_mp3(filepath)
-            mp3 = mp3.set_channels(1)
-            mp3 = mp3.set_frame_rate(FRAME_RATE)
+        try:
+            for _, row in untranscribed_episodes.iterrows():
+                logger.info("Transcribing %s",row['filename'])
+                filepath = os.path.join(EPISODE_FOLDER, row["filename"])
+                mp3 = AudioSegment.from_mp3(filepath)
+                mp3 = mp3.set_channels(1)
+                mp3 = mp3.set_frame_rate(FRAME_RATE)
 
-            step = 20000
-            transcript = ""
-            for i in range(0, len(mp3), step):
-                print(f"Progress: {i/len(mp3)}")
-                segment = mp3[i:i+step]
-                rec.AcceptWaveform(segment.raw_data)
-                result = rec.Result()
-                text = json.loads(result)["text"]
-                transcript += text
-            hook.insert_rows(
-                table='episodes',
-                rows=[[row["link"], transcript]],
-                target_fields=["link", "transcript"],
-                replace=True
-            )
+                step = 20000
+                transcript = ""
+                for i in range(0, len(mp3), step):
+                    logger.debug("Transcription progress: %s",i/len(mp3))
+                    segment = mp3[i:i+step]
+                    rec.AcceptWaveform(segment.raw_data)
+                    result = rec.Result()
+                    text = json.loads(result)["text"]
+                    transcript += text
+                hook.insert_rows(
+                    table='episodes',
+                    rows=[[row["link"], transcript]],
+                    target_fields=["link", "transcript"],
+                    replace=True
+                )
+                logger.info("Transcription completed for %s",row['filename'])
+        except Exception as err:
+            logger.error("Error transcribing audio content: %s",err)
+            raise
 
     # Uncomment this to try speech to text (may not work)
     speech_to_text()
