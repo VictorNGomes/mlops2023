@@ -26,6 +26,20 @@ pip install -r requiriments.txt
 
 - As funções do projeto estão organizadas em módulos para facilitar a manutenção e expansão.
 
+## Funcionalidades Principais
+
+- **Refatoração:** O projeto foi refatorado para melhorar a estrutura, organização e legibilidade do código.
+
+- **Princípios de Código Limpo:** Foram aplicados princípios de código limpo para garantir que o código seja fácil de entender e manter.
+
+- **Linting com Pylint:** O Pylint foi usado para verificar o código em busca de possíveis problemas, garantindo um código mais consistente.
+
+- **Tratamento de Exceções:** Foram implementados tratamentos de exceções para lidar com erros de forma adequada, melhorando a robustez do sistema.
+
+- **Logging:** Foi implementado um sistema de logging para registrar informações detalhadas sobre as operações do sistema, facilitando a depuração e monitoramento.
+
+- **Testes Unitários:** Testes unitários foram desenvolvidos para garantir o funcionamento correto das funcionalidades.
+
 ## Contribuição
 
 Contribuições são bem-vindas! Sinta-se à vontade para abrir problemas (issues) e enviar solicitações de pull (pull requests) para melhorar o projeto.
