@@ -16,7 +16,7 @@ git clone git@github.com:VictorNGomes/mlops2023.git && cd mlops2023/Python_Essen
 
 2. Instale as depêndecias:
 ```.bash
-pip install -r requiriments.txt
+pip install -r requirements.txt
 ```
 
 
