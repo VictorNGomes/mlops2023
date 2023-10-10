@@ -3,12 +3,16 @@ Classifying Heart Disease
 
 Este script carrega dados de um conjunto de dados de doença cardíaca, pré-processa os dados,
 treina um modelo de regressão logística e avalia o desempenho do modelo.
-
 """
+
+import logging
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from ucimlrepo import fetch_ucirepo
+
+# Configurando o sistema de logs
+logging.basicConfig(level=logging.INFO)  # Define o nível mínimo de log para INFO
 
 def print_function_name(func):
     """Decorator para imprimir o nome da função.
@@ -21,7 +25,7 @@ def print_function_name(func):
     """
     def wrapper(*args, **kwargs):
         """Função de invólucro que imprime o nome da função antes de executá-la."""
-        print(f"Executando função: {func.__name__}")
+        logging.info("Executando função: %s",func.__name__)
         result = func(*args, **kwargs)
         return result
     return wrapper
@@ -40,7 +44,7 @@ def display_head(func):
          linhas do DataFrame se o resultado for um DataFrame."""
         result = func(*args, **kwargs)
         if isinstance(result, pd.DataFrame):
-            print(result.head())
+            logging.debug(result.head())
         return result
     return wrapper
 
@@ -58,27 +62,31 @@ def calculate_performance_metrics(func):
 
         Args:
             model: O modelo treinado.
-            x_test: Os dados de teste.
-            y_test: As etiquetas de teste.
+            x_test (pandas.DataFrame): Os dados de teste.
+            y_test (pandas.Series): As etiquetas de teste.
 
         Returns:
             model: O modelo treinado.
         """
-        predictions = model.predict(x_test)
-        tp = sum((predictions == 1) & (y_test == 1))
-        fp = sum((predictions == 1) & (y_test == 0))
-        tn = sum((predictions == 0) & (y_test == 0))
-        fn = sum((predictions == 0) & (y_test == 1))
-        sens = tp / (tp + fn)
-        spec = tn / (tn + fp)
+        try:
+            predictions = model.predict(x_test)
+            tp = sum((predictions == 1) & (y_test == 1))
+            fp = sum((predictions == 1) & (y_test == 0))
+            tn = sum((predictions == 0) & (y_test == 0))
+            fn = sum((predictions == 0) & (y_test == 1))
+            sens = tp / (tp + fn)
+            spec = tn / (tn + fp)
 
-        acc = model.score(x_test, y_test)
+            acc = model.score(x_test, y_test)
 
-        print("Test Accuracy:", acc)
-        print("Test Sensitivity:", sens)
-        print("Test Specificity:", spec)
+            logging.info("Test Accuracy: %f", acc)
+            logging.info("Test Sensitivity: %f", sens)
+            logging.info("Test Specificity: %f", spec)
 
-        return model
+            return model
+        except Exception as e:
+            logging.error("Erro ao calcular métricas de desempenho: %s", str(e))
+            raise e
     return wrapper
 
 @print_function_name
@@ -91,7 +99,11 @@ def load_data(filename):
     Returns:
         pandas.DataFrame: Um DataFrame contendo os dados do arquivo CSV.
     """
-    return pd.read_csv(filename)
+    try:
+        return pd.read_csv(filename)
+    except Exception as e:
+        logging.error("Erro ao carregar dados do arquivo CSV: %s", str(e))
+        raise e
 
 @display_head
 def select_features_and_target(data):
@@ -103,9 +115,13 @@ def select_features_and_target(data):
     Returns:
         tuple: Uma tupla contendo os recursos (x) e o alvo (y).
     """
-    x = data[["age", "thalach", "restecg", "ca"]]
-    y = data["present"]
-    return x, y
+    try:
+        x = data[["age", "thalach", "restecg", "ca"]]
+        y = data["present"]
+        return x, y
+    except Exception as e:
+        logging.error("Erro ao selecionar recursos e alvo: %s", str(e))
+        raise e
 
 @calculate_performance_metrics
 def evaluate_model(model, x_test, y_test):
@@ -113,8 +129,8 @@ def evaluate_model(model, x_test, y_test):
 
     Args:
         model: O modelo treinado.
-        x_test: Os dados de teste.
-        y_test: As etiquetas de teste.
+        x_test (pandas.DataFrame): Os dados de teste.
+        y_test (pandas.Series): As etiquetas de teste.
 
     Returns:
         model: O modelo treinado.
@@ -130,35 +146,41 @@ def fetch_ucirepo_data(id):
     Returns:
         tuple: Uma tupla contendo os recursos (x) e o alvo (y) do conjunto de dados.
     """
-    heart_disease = fetch_ucirepo(id=id)
-    x = heart_disease.data.features
-    y = heart_disease.data.targets
-    return x, y
+    try:
+        heart_disease = fetch_ucirepo(id=id)
+        x = heart_disease.data.features
+        y = heart_disease.data.targets
+        return x, y
+    except Exception as e:
+        logging.error("Erro ao buscar dados do ucimlrepo: %s", str(e))
+        raise e
 
 def main():
     """Função principal para treinar e avaliar o modelo."""
-    # Obtendo dados usando fetch_ucirepo
-    x, y = fetch_ucirepo_data(id=45)
+    try:
+        # Obtendo dados usando fetch_ucirepo
+        x, y = fetch_ucirepo_data(id=45)
 
-    # Criando um DataFrame a partir dos dados
-    heart = pd.DataFrame(data=x, columns=["age", "thalach", "restecg", "ca"])
-    heart["present"] = y
+        # Criando um DataFrame a partir dos dados
+        heart = pd.DataFrame(data=x, columns=["age", "thalach", "restecg", "ca"])
+        heart["present"] = y
 
-    # Removendo linhas com valores ausentes
-    heart.dropna(inplace=True)
+        # Removendo linhas com valores ausentes
+        heart.dropna(inplace=True)
 
-    # Dividindo o conjunto de dados em treinamento e teste
-    x = heart[["age", "thalach", "restecg", "ca"]]
-    y = heart["present"]
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=1)
+        # Dividindo o conjunto de dados em treinamento e teste
+        x = heart[["age", "thalach", "restecg", "ca"]]
+        y = heart["present"]
+        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=1)
 
-    # Criando e ajustando o modelo LogisticRegression
-    model = LogisticRegression()
-    model.fit(x_train, y_train)
+        # Criando e ajustando o modelo LogisticRegression
+        model = LogisticRegression()
+        model.fit(x_train, y_train)
 
-    # Avaliando o modelo
-    evaluate_model(model, x_test, y_test)
+        # Avaliando o modelo
+        evaluate_model(model, x_test, y_test)
+    except Exception as e:
+        logging.error("Erro durante a execução do programa: %s", str(e))
 
 if __name__ == "__main__":
     main()
-   
