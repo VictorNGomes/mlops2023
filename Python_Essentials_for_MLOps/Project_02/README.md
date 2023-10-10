@@ -10,7 +10,7 @@ Este projeto faz parte do portfólio de projetos do Dataquest.io e tem como obje
 
 **Modificações Realizadas:**
 
-Foi relaizado o tratamento de exceções, registro de atividades (logging) e práticas de linting. Também incluímos uma seção sobre linting com o Pylint para garantir a qualidade e a consistência do código-fonte.
+Foi relaizado o tratamento de exceções, registro de atividades (logging) e práticas de linting. Também incluímos uma seção sobre linting com o Pylint para garantir a qualidade e a consistência do código-fonte. Testes unitários foram desenvolvidos para garantir o funcionamento correto de algumas funcionalidades.
 
 **Configuração e Instalação:**
 
