@@ -6,11 +6,18 @@
 ## Introdução
 Este repositório foi criado como parte de um trabalho da disciplina de MLOps na Universidade Federal do Rio Grande do Norte, pertencente ao curso de Engenharia da Computação. O objetivo deste repositório é fornecer um conjunto de recursos e projetos relacionados ao uso essencial de Python em Machine Learning Operations (MLOps).
 
+**MLOps** é uma disciplina que se concentra na integração contínua, implantação contínua e operação eficiente de sistemas de aprendizado de máquina. Ela busca alinhar as práticas de desenvolvimento de modelos de machine learning com os princípios do DevOps, garantindo a entrega contínua e confiável de soluções de machine learning.
+
+Nossos projetos incorporam as boas práticas do MLOps, como o uso de logging, testes de unidade, CLI e refatoração, a fim de garantir que os projetos sejam facilmente mantidos e escalados. Além disso, mantemos uma forte relação com **DevOps**, uma abordagem que visa integrar desenvolvimento e operações, aumentando a eficiência e a confiabilidade do ciclo de vida do software.
+
+Explore os projetos neste repositório, todos eles procuram seguir essas boas práticas para programação em Python com ênfase em MLOps, contribuindo para a interseção entre MLOps e DevOps.
+
+
 ## Projetos
 Este repositório inclui os seguintes projetos:
 
 1. **Projeto de Classificação de Doença Cardíaca com Regressão Logística**
-   - Descrição: Este projeto é um Guided Project do Dataquest.io, onde você irá desenvolver um modelo de classificação de doenças cardíacas utilizando regressão logística.
+   - Descrição: Este projeto é um Guided Project do Dataquest.io, onde é desenvolvido um modelo de classificação de doenças cardíacas utilizando regressão logística.
    - [Link para o Projeto](#)
 
 2. **Sistema de Recomendação de Filmes**
