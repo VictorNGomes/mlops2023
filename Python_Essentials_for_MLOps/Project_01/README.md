@@ -22,7 +22,7 @@ pip install -r requirements.txt
 
 ## Uso
 
-- `movie_recommendations.py` é o script principal que permite realizar pesquisas e obter recomendações de filmes com base em títulos.
+- `movie_recommendations_reafctored.py` é o script principal que permite realizar pesquisas e obter recomendações de filmes com base em títulos.No script ta já está selecionado o título Toy Story.
 
 - As funções do projeto estão organizadas em módulos para facilitar a manutenção e expansão.
 
@@ -37,6 +37,17 @@ pip install -r requirements.txt
 - **Tratamento de Exceções:** Foram implementados tratamentos de exceções para lidar com erros de forma adequada, melhorando a robustez do sistema.
 
 - **Logging:** Foi implementado um sistema de logging para registrar informações detalhadas sobre as operações do sistema, facilitando a depuração e monitoramento.
+    ```log
+    2023-10-08 01:51:31,942 [INFO] - Arquivos CSV extraídos com sucesso.
+    2023-10-08 01:51:40,521 [INFO] - Dados carregados com sucesso.
+    2023-10-08 01:51:40,788 [INFO] - Título limpo
+    2023-10-08 01:51:41,870 [INFO] - Títulos vetorizados
+    2023-10-08 23:31:48,881 [INFO] - Diretório './movielens_data/' já existe.
+    2023-10-08 23:31:53,386 [INFO] - O arquivo ZIP já existe. Não é necessário fazer o download novamente.
+    2023-10-08 23:32:03,998 [INFO] - Arquivos CSV extraídos com sucesso.
+    2023-10-08 23:35:12,552 [INFO] - Dados carregados com sucesso.
+
+    ```
 
 - **Testes Unitários:** Testes unitários foram desenvolvidos para garantir o funcionamento correto das funcionalidades.
 
