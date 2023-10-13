@@ -27,15 +27,18 @@ Este repositório inclui os seguintes projetos:
 
 1. **Projeto de Classificação de Doença Cardíaca com Regressão Logística**
    - Descrição: Este projeto é um Guided Project do Dataquest.io, onde é desenvolvido um modelo de classificação de doenças cardíacas utilizando regressão logística.
-   - [Link para o Projeto](#)
+   - [Projeto Original]()
+   - [Projeto Modificado](#)
 
 2. **Sistema de Recomendação de Filmes**
    - Descrição: Um projeto do portfólio que envolve a criação de um sistema de recomendação de filmes, com base em algoritmos de filtragem colaborativa e outros métodos de recomendação.
-   - [Link para o Projeto](#)
+   - [Projeto Original]()
+   - [Projeto Modificado](#)
 
 3. **Podcast Summary**
    - Descrição: Outro projeto do portfólio que consiste na criação de um resumo de podcasts automaticamente. Este projeto envolve o processamento de áudio e NLP para extrair informações relevantes dos podcasts.
-   - [Link para o Projeto](#)
+   - [Projeto Original]()
+   - [Projeto Modificado](#)
 
 ## Licença
 Este repositório está sob a Licença MIT. Consulte o arquivo [LICENSE](LICENSE) para obter mais detalhes.
