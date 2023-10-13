@@ -1,7 +1,16 @@
 # Python Essentials for MLOps
+## Identificação e Afiliação
 
-## Universidade Federal do Rio Grande do Norte
-### Engenharia da Computação
+**Discente:** Victor do Nascimento Gomes
+
+**Disciplina:** PROJETO DE SISTEMAS BASEADOS EM APRENDIZADO DE MÁQUINA (DCA0305)
+
+**Instituição:** Universidade Federal do Rio Grande do Norte (UFRN)
+
+**Curso:** Engenharia da Computação
+
+Neste repositório, os projetos são desenvolvidos como parte das atividades da disciplina "PROJETO DE SISTEMAS BASEADOS EM APRENDIZADO DE MÁQUINA" oferecida pela Universidade Federal do Rio Grande do Norte, no âmbito do curso de Engenharia da Computação. O objetivo é aplicar as melhores práticas de MLOps e incorporar conhecimentos relacionados a aprendizado de máquina em projetos práticos.
+
 
 ## Introdução
 Este repositório foi criado como parte de um trabalho da disciplina de MLOps na Universidade Federal do Rio Grande do Norte, pertencente ao curso de Engenharia da Computação. O objetivo deste repositório é fornecer um conjunto de recursos e projetos relacionados ao uso essencial de Python em Machine Learning Operations (MLOps).
