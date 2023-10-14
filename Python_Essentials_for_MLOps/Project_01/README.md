@@ -36,6 +36,9 @@ O projeto utiliza o conjunto de dados [MovieLens 25M](https://grouplens.org/data
     ```
 
 - **Testes Unitários:** Testes unitários foram desenvolvidos para garantir o funcionamento correto das funcionalidades.
+    ```
+    pytest tests_project_01.py
+    ```
 
 ## Contribuição
 
