@@ -20,10 +20,7 @@ Aqui estão os três projetos incluídos nesta pasta:
 - Bibliotecas específicas para cada projeto (detalhadas nos READMEs dos projetos)
 
 ## Instruções de Instalação
-## Configuração
-
-
-### Instalação
+## Instalação
 
 1. Clone este repositório:
 ````
@@ -47,4 +44,5 @@ python3 Python_Essentials_for_MLOps/Project_03/classifying_heart_disease.py
 ```
 
 ## Referências
-- [Link para o Vídeo de Introdução aos Projetos](#) (insira o link para o vídeo de introdução, se aplicável)
+- [Link para o Vídeo de Introdução aos Projetos](#)
+- [Link Certificado Curso](https://app.dataquest.io/view_cert/IOSGC8GE23J60RDBUU8U)
