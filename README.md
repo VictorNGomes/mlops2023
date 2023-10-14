@@ -40,7 +40,7 @@ Este repositório inclui os seguintes projetos:
    - [Projeto Original](https://github.com/dataquestio/solutions/blob/master/Mission735Solutions.ipynb)
    - [Projeto Modificado](https://github.com/VictorNGomes/mlops2023/tree/main/Python_Essentials_for_MLOps/Project_03)
 ## Licença
-Este repositório está sob a Licença MIT. Consulte o arquivo [LICENSE](LICENSE) para obter mais detalhes.
+Este repositório está sob a Licença MIT. Consulte o arquivo [LICENSE](https://opensource.org/license/mit/) para obter mais detalhes.
 
 ## Referências
 Aqui estão algumas referências úteis relacionadas aos tópicos abordados neste repositório:
