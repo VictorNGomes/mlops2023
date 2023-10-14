@@ -20,7 +20,31 @@ Aqui estão os três projetos incluídos nesta pasta:
 - Bibliotecas específicas para cada projeto (detalhadas nos READMEs dos projetos)
 
 ## Instruções de Instalação
-Para obter instruções detalhadas sobre como instalar e executar cada projeto, consulte o README no diretório correspondente a cada projeto.
+## Configuração
+
+
+### Instalação
+
+1. Clone este repositório:
+````
+git clone git@github.com:VictorNGomes/mlops2023.git && cd mlops2023
+````
+
+2. Instale as depêndecias:
+```.bash
+pip install -r requirements.txt
+```
+
+3. Para iniciar as aplicações batsa excutar cada script em sua devida pasta:
+```.bash
+python3 Python_Essentials_for_MLOps/Project_01movie_recommendations_reafctored.py 
+```
+```.bash
+python3 Python_Essentials_for_MLOps/Project_02/dags/podcast_summary.py
+``` 
+```
+python3 Python_Essentials_for_MLOps/Project_03/classifying_heart_disease.py
+```
 
 ## Referências
 - [Link para o Vídeo de Introdução aos Projetos](#) (insira o link para o vídeo de introdução, se aplicável)

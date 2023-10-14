@@ -22,12 +22,6 @@ Para configurar o ambiente de desenvolvimento e executar este projeto localmente
 
 2. Instale as bibliotecas Python necessárias, como `pandas`, `sqlite3`, `xmltodict`, `requests`, `vosk`, e `pydub`.
 
-3. Configure as credenciais necessárias, como a URL do podcast e informações de autenticação, conforme aplicável.
-
-4. Clone este repositório para o seu ambiente local.
-
-5. Execute o arquivo `podcast_summary.py` para iniciar o pipeline de dados.
-
 Para obter mais detalhes e instruções específicas sobre a configuração local, consulte a seção "Configuração Local" abaixo.
 
 Este projeto oferece uma oportunidade prática de trabalhar com o Apache Airflow, processamento de áudio e integração de várias bibliotecas Python. Explore o código e utilize as instruções fornecidas para executar e personalizar o pipeline de acordo com as suas necessidades.
@@ -38,7 +32,7 @@ Este projeto oferece uma oportunidade prática de trabalhar com o Apache Airflow
 
 
 
-## Registo e Tratamento de Erros
+## Logs e Tratamento de Erros
 
 Neste projeto, implementamos o tratamento de erros e o registo para garantir a confiabilidade e a rastreabilidade do nosso pipeline de dados. Abaixo, descrevemos como lidamos com exceções e geramos registos:
 
@@ -52,7 +46,7 @@ Integramos o tratamento de exceções em partes críticas do código para gerir 
 
 * `Exception`: Capturamos a classe genérica `Exception` para lidar com quaisquer erros imprevistos que possam surgir durante o processo de transcrição.
 
-### Registo
+### Log
 
 O registo é um componente crucial deste projeto, e usamos o módulo Python `logging` para criar registos em vários níveis. Eis como utilizamos o registo:
 

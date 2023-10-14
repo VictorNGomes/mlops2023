@@ -4,20 +4,6 @@ Este projeto tem como objetivo a refatoração, a aplicação dos princípios de
 
 O projeto utiliza o conjunto de dados [MovieLens 25M](https://grouplens.org/datasets/movielens/25m/) para recomendar filmes com base em títulos, gêneros e avaliações dos usuários.
 
-## Configuração
-
-
-### Instalação
-
-1. Clone este repositório:
-````
-git clone git@github.com:VictorNGomes/mlops2023.git && cd mlops2023/Python_Essentials_for_MLOps/Project_01
-````
-
-2. Instale as depêndecias:
-```.bash
-pip install -r requirements.txt
-```
 
 
 ## Uso
