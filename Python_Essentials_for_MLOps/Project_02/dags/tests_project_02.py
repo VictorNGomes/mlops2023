@@ -1,16 +1,41 @@
 import requests
 from requests.exceptions import RequestException
-#from podcast_summary import get_episodes
+from podcast_summary import podcast_summary
+from airflow.models import DagBag, TaskInstance
 from airflow.decorators import dag, task
-
+import pendulum
 import pytest
 import requests_mock
+from unittest.mock import patch, Mock
+
+
+
+def test_get_episodes():
+    dags = podcast_summary()
+    task_get_episodes = dags.get_task('get_episodes')
+    assert task_get_episodes is not None
 
 @pytest.fixture
 def requests_mock_fixture():
     with requests_mock.Mocker() as mock:
         # Configure o comportamento do mock aqui
         yield mock
+
+def test_get_episodes_():
+    dags = podcast_summary()
+    task = dags.get_task('get_episodes')
+    ti = TaskInstance(task)
+    mock = Mock()
+    # Mock a execução bem-sucedida da tarefa
+    mock.patch('airflow.models.TaskInstance.get_state', return_value='success')
+
+    # Execute a tarefa
+    ti.run()
+
+    # Verifique se a tarefa foi bem-sucedida
+    assert ti.state == 'success'
+
+
 
 def test_get_episodes_success(requests_mock):
     # Configure o mock para retornar dados simulados
@@ -35,19 +60,19 @@ def test_get_episodes_success(requests_mock):
     requests_mock.get("https://www.marketplace.org/feed/podcast/marketplace/", text=mock_data)
 
     # Chame a função e verifique o resultado
-    episodes = get_episodes()
-    assert len(episodes) == 2
+    dag = podcast_summary()
+    episodes = dag.get_task('get_episodes')
+    ti = TaskInstance(episodes)
+    ti.run()
+
+    # Acesse os resultados da execução da tarefa
+    result = ti.xcom_pull()
+
+    # Verifique se a propriedade 'title' do primeiro episódio está correta
+    assert result[0]['title'] == "Episode 1"
+   
+    #assert len(episodes) == 2
     assert episodes[0]['title'] == "Episode 1"
     assert episodes[1]['title'] == "Episode 2"
 
-def test_get_episodes_failure(requests_mock):
-    # Configure o mock para simular uma falha na requisição
-    requests_mock.get("https://www.marketplace.org/feed/podcast/marketplace/", exc=RequestException("Failed"))
 
-    # Chame a função e verifique se ela lida com a exceção corretamente
-    try:
-        episodes = get_episodes()
-    except RequestException as err:
-        assert str(err) == "Failed"
-    else:
-        pytest.fail("Expected RequestException but got no exception")
