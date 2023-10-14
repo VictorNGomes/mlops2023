@@ -25,21 +25,20 @@ Explore os projetos neste repositório, todos eles procuram seguir essas boas pr
 ## Projetos
 Este repositório inclui os seguintes projetos:
 
-1. **Projeto de Classificação de Doença Cardíaca com Regressão Logística**
-   - Descrição: Este projeto é um Guided Project do Dataquest.io, onde é desenvolvido um modelo de classificação de doenças cardíacas utilizando regressão logística.
-   - [Projeto Original]()
-   - [Projeto Modificado](#)
-
-2. **Sistema de Recomendação de Filmes**
+1. **Sistema de Recomendação de Filmes**
    - Descrição: Um projeto do portfólio que envolve a criação de um sistema de recomendação de filmes, com base em algoritmos de filtragem colaborativa e outros métodos de recomendação.
-   - [Projeto Original]()
-   - [Projeto Modificado](#)
+   - [Projeto Original](https://github.com/dataquestio/project-walkthroughs/blob/master/movie_recs/movie_recommendations.ipynb)
+   - [Projeto Modificado](https://github.com/VictorNGomes/mlops2023/tree/main/Python_Essentials_for_MLOps/Project_01)
 
-3. **Podcast Summary**
+2. **Podcast Summary**
    - Descrição: Outro projeto do portfólio que consiste na criação de um resumo de podcasts automaticamente. Este projeto envolve o processamento de áudio e NLP para extrair informações relevantes dos podcasts.
-   - [Projeto Original]()
-   - [Projeto Modificado](#)
+   - [Projeto Original](https://github.com/dataquestio/project-walkthroughs/tree/master/podcast_summary)
+   - [Projeto Modificado](https://github.com/VictorNGomes/mlops2023/tree/main/Python_Essentials_for_MLOps/Project_02)
 
+3. **Projeto de Classificação de Doença Cardíaca com Regressão Logística**
+   - Descrição: Este projeto é um Guided Project do Dataquest.io, onde é desenvolvido um modelo de classificação de doenças cardíacas utilizando regressão logística.
+   - [Projeto Original](https://github.com/dataquestio/solutions/blob/master/Mission735Solutions.ipynb)
+   - [Projeto Modificado](https://github.com/VictorNGomes/mlops2023/tree/main/Python_Essentials_for_MLOps/Project_03)
 ## Licença
 Este repositório está sob a Licença MIT. Consulte o arquivo [LICENSE](LICENSE) para obter mais detalhes.
 
