@@ -11,15 +11,16 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from ucimlrepo import fetch_ucirepo
 
+# Configurando o sistema de logs
 log_formatter = logging.Formatter("%(asctime)s [%(levelname)s] - %(message)s")
 
 # Configuração do logging
-LOG_FILE = 'classifying_heart_disease.log'
+LOG_FILE = 'recommendation.log'
 log_handler = logging.FileHandler(LOG_FILE)
 log_handler.setFormatter(log_formatter)
 logger = logging.getLogger()
 logger.addHandler(log_handler)
-logger.setLevel(logging.INFO) # Define o nível mínimo de log para INFO
+logger.setLevel(logging.INFO)  # Define o nível mínimo de log para INFO
 
 def print_function_name(func):
     """Decorator para imprimir o nome da função.
@@ -144,9 +145,7 @@ def evaluate_model(model, x_test, y_test):
     """
     return model
 
-def fetch_ucirepo_data(
-        
-):
+def fetch_ucirepo_data(id):
     """Busca dados usando o pacote ucimlrepo.
 
     Args:
