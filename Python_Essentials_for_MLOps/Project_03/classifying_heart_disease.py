@@ -144,7 +144,9 @@ def evaluate_model(model, x_test, y_test):
     """
     return model
 
-def fetch_ucirepo_data(id):
+def fetch_ucirepo_data(
+        
+):
     """Busca dados usando o pacote ucimlrepo.
 
     Args:
