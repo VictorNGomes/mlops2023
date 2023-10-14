@@ -18,9 +18,15 @@ from airflow.providers.sqlite.hooks.sqlite import SqliteHook
 from vosk import Model, KaldiRecognizer
 from pydub import AudioSegment
 
-# Configuração do registro (logging)
-logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
-logger = logging.getLogger(__name__)
+log_formatter = logging.Formatter("%(asctime)s [%(levelname)s] - %(message)s")
+
+# Configuração do logging
+LOG_FILE = 'podcast_summary.log'
+log_handler = logging.FileHandler(LOG_FILE)
+log_handler.setFormatter(log_formatter)
+logger = logging.getLogger()
+logger.addHandler(log_handler)
+logger.setLevel(logging.INFO)
 
 PODCAST_URL = "https://www.marketplace.org/feed/podcast/marketplace/"
 EPISODE_FOLDER = "episodes"
@@ -29,8 +35,9 @@ FRAME_RATE = 16000
 @dag(
     dag_id='podcast_summary',
     schedule_interval="@daily",
-    start_date=pendulum.datetime(2022, 5, 30),
+    start_date=pendulum.now(),
     catchup=False,
+    auto_register=False
 )
 def podcast_summary():
     """
