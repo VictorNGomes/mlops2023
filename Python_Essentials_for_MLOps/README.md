@@ -34,7 +34,7 @@ pip install -r requirements.txt
 
 3. Para iniciar as aplicações batsa excutar cada script em sua devida pasta:
 ```.bash
-python3 Python_Essentials_for_MLOps/Project_01movie_recommendations_reafctored.py 
+python3 Python_Essentials_for_MLOps/Project_01movie_recommendations.py 
 ```
 ```.bash
 python3 Python_Essentials_for_MLOps/Project_02/dags/podcast_summary.py
