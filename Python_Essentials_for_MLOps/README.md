@@ -36,13 +36,21 @@ pip install -r requirements.txt
 ```.bash
 python3 Python_Essentials_for_MLOps/Project_01movie_recommendations.py 
 ```
-```.bash
-python3 Python_Essentials_for_MLOps/Project_02/dags/podcast_summary.py
-``` 
 ```
 python3 Python_Essentials_for_MLOps/Project_03/classifying_heart_disease.py
 ```
+4. Instalações necessarias para o podcast_summmary
+
+`airflow`
+```
+
+```
+
+```.bash
+python3 Python_Essentials_for_MLOps/Project_02/dags/podcast_summary.py
+``` 
+
 
 ## Referências
-- [Link para o Vídeo de Introdução aos Projetos](#)
+- [Link para o Vídeo de Introdução aos Projetos](https://www.loom.com/share/dcf3f606705e4035994d1ac0cdb4845e?sid=32b112ba-7966-4f2b-b9a8-e2f34931a42e)
 - [Link Certificado Curso](https://app.dataquest.io/view_cert/IOSGC8GE23J60RDBUU8U)
