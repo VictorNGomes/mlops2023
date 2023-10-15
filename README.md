@@ -1,6 +1,7 @@
 # Python Essentials for MLOps
-![IMAGEM](https://github.com/VictorNGomes/mlops2023/blob/main/images/dca.jpg)
+
 ## Identificação e Afiliação
+![IMAGEM](https://github.com/VictorNGomes/mlops2023/blob/main/images/mlops.png)
 
 **Discente:** Victor do Nascimento Gomes
 
