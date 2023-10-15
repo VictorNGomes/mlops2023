@@ -52,5 +52,5 @@ python3 Python_Essentials_for_MLOps/Project_02/dags/podcast_summary.py
 
 
 ## Referências
-- [Link para o Vídeo de Introdução aos Projetos](https://www.loom.com/share/dcf3f606705e4035994d1ac0cdb4845e?sid=32b112ba-7966-4f2b-b9a8-e2f34931a42e)
+- [Link para o Vídeo de Introdução aos Projetos](https://www.loom.com/share/4a8964f88cdc41aa92b3f10a0a734133?sid=e6cd4dd3-7a2a-4a71-8f18-a42a17192436)
 - [Link Certificado Curso](https://app.dataquest.io/view_cert/IOSGC8GE23J60RDBUU8U)
