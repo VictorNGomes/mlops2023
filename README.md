@@ -14,7 +14,8 @@ Neste repositório, os projetos são desenvolvidos como parte das atividades da 
 
 ## Introdução
 Este repositório foi criado como parte de um trabalho da disciplina de MLOps na Universidade Federal do Rio Grande do Norte, pertencente ao curso de Engenharia de Computação. O objetivo deste repositório é fornecer um conjunto de recursos e projetos relacionados ao uso essencial de Python em Machine Learning Operations (MLOps).
-![IMAGEM](https://github.com/VictorNGomes/mlops2023/blob/main/images/mlops.png)
+![IMAGEM](https://github.com/VictorNGomes/mlops2023/blob/main/images/mlops.png
+**Fonte da Imagem:** [Insira o Link da Fonte da Imagem aqui](https://blog.nvidia.com.br/2020/09/08/o-que-e-mlops/)
 
 **MLOps** é uma disciplina que se concentra na integração contínua, implantação contínua e operação eficiente de sistemas de aprendizado de máquina. Ela busca alinhar as práticas de desenvolvimento de modelos de machine learning com os princípios do DevOps, garantindo a entrega contínua e confiável de soluções de machine learning.
 
