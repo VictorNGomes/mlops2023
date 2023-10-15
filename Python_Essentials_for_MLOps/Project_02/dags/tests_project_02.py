@@ -28,7 +28,6 @@ def test_get_episodes_():
     mock = Mock()
     # Mock a execução bem-sucedida da tarefa
     mock.patch('airflow.models.TaskInstance.get_state', return_value='success')
-
     # Execute a tarefa
     ti.run()
 
@@ -75,4 +74,19 @@ def test_get_episodes_success(requests_mock):
     assert episodes[0]['title'] == "Episode 1"
     assert episodes[1]['title'] == "Episode 2"
 
+def test_task_load_episodes():
+    dag = podcast_summary()
+    task_load_episodes = dag.get_task('load_episodes')
+    assert task_load_episodes is not None
 
+    # Simule dados de episódios para testar a tarefa
+    episodes_data = [{'link': 'episode_link', 'title': 'Episode 1', 'pubDate': '2023-10-13', 'description': 'Description', 'filename': 'episode1.mp3'}]
+
+    ti = TaskInstance(task_load_episodes, execution_date=pendulum.now())
+    ti.xcom_push(key=None, value=episodes_data)  # Define os dados simulados como XCom
+
+    # Execute a tarefa
+    result = task_load_episodes.execute(ti.get_template_context())
+
+    # Verifique se a tarefa retornou o número esperado de novos episódios
+    assert len(result) == 1
